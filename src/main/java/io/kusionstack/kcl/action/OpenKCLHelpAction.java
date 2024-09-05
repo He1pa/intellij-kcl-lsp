@@ -2,6 +2,8 @@
  * KusionStack. Copyright (c) 2020-2020 All Rights Reserved.
  */
 package io.kusionstack.kcl.action;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author amyxia
@@ -11,5 +13,10 @@ public class OpenKCLHelpAction extends OpenLinkAction {
     @Override
     public String getLink() {
         return "https://kusionstack.io/docs/reference/lang/lang/tour";
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 }

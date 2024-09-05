@@ -15,20 +15,21 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 
 /**
  * @author amyxia
- * @version FormatSingleFileAction: FormatSingleFileAction.java, v 0.1 2020年11月04日 10:00 下午 amyxia Exp $
+ * @version FormatSingleFileAction: FormatSingleFileAction.java, v 0.1
+ *          2020年11月04日 10:00 下午 amyxia Exp $
  */
 public class FormatSingleFileAction extends AnAction {
     @Override
     public void update(@NotNull AnActionEvent e) {
         // Using the event, evaluate the context, and enable or disable the action.
         // the action button is visible only when the current file is a kcl file
-        VirtualFile vf = e.getData(CommonDataKeys.VIRTUAL_FILE);
-        e.getPresentation().setVisible((vf != null && isKCLFile(vf)));
+        e.getPresentation().setVisible(true);
         // the action button is enabled only when kcl is installed
-        e.getPresentation().setEnabled(KCLBinaryUtil.KCLFmtCmdInstalled());
+        e.getPresentation().setEnabled(KCLBinaryUtil.KCLInstalled());
     }
 
     @Override
@@ -44,7 +45,7 @@ public class FormatSingleFileAction extends AnAction {
         }
 
         // execute kcl --fmt <filepath> command to get formatted content
-        KCLFmtCommand.execute(file);
+        KCLFmtCommand.execute(file, false);
         VfsUtil.markDirtyAndRefresh(true, true, true, file);
     }
 
@@ -53,5 +54,10 @@ public class FormatSingleFileAction extends AnAction {
             return (virtualFile.getFileType() instanceof KCLFileType);
         }
         return false;
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread(){
+        return ActionUpdateThread.BGT;
     }
 }
